@@ -9,5 +9,11 @@
      <button id="write" class="write"><i class="fa-solid fa-pencil"></i></button>
 */
 
-
-
+const EscrevaBotoes = document.querySelectorAll('.write');
+const modal = document.getElementById('modal');
+const fecharModal = document.getElementById('close-modal')
+EscrevaBotoes.forEach(button => {
+    button.addEventListener("click", function() {
+        console.log("oi")
+    })
+})
