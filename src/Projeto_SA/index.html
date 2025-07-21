@@ -25,30 +25,55 @@
         </div>
         <div class="right-side-panel">
             <div class="content">
-                <div class="Bar-Element">Junior Balesco Culibier da Silva <button id="info"><i class="fa-solid fa-info"></i></button> <button id="write" class="write"><i class="fa-solid fa-pencil"></i></button>   <button id="trash"><i class="fa-solid fa-trash"></i></button> </div>
-                <div class="Bar-Element">Junior Balesco Culibier da Silva <button id="info"><i class="fa-solid fa-info"></i></button> <button id="write" class="write"><i class="fa-solid fa-pencil"></i></button>   <button id="trash"><i class="fa-solid fa-trash"></i></button> </div>
-                <div class="Bar-Element">Junior Balesco Culibier da Silva <button id="info"><i class="fa-solid fa-info"></i></button> <button id="write" class="write"><i class="fa-solid fa-pencil"></i></button>   <button id="trash"><i class="fa-solid fa-trash"></i></button> </div>
-                <div class="Bar-Element">Junior Balesco Culibier da Silva <button id="info"><i class="fa-solid fa-info"></i></button> <button id="write" class="write"><i class="fa-solid fa-pencil"></i></button>   <button id="trash"><i class="fa-solid fa-trash"></i></button> </div>
-                <div class="Create-Cadastro"> <button id="empty"> Adicionar novo cadastro </button> </div>
+                <div class="scrollable-area">
+                    <div class="Bar-Element">
+                        Junior Balesco Culibier da Silva 
+                        <button class="info-btn" data-id="1"><i class="fa-solid fa-info"></i></button> 
+                        <button class="write-btn" data-id="1"><i class="fa-solid fa-pencil"></i></button>   
+                        <button class="trash-btn" data-id="1"><i class="fa-solid fa-trash"></i></button> 
+                    </div>
+                    <div class="Bar-Element">
+                        Maria Santos Silva 
+                        <button class="info-btn" data-id="2"><i class="fa-solid fa-info"></i></button> 
+                        <button class="write-btn" data-id="2"><i class="fa-solid fa-pencil"></i></button>   
+                        <button class="trash-btn" data-id="2"><i class="fa-solid fa-trash"></i></button> 
+                    </div>
+                    <div class="Bar-Element">
+                        João Pedro Oliveira 
+                        <button class="info-btn" data-id="3"><i class="fa-solid fa-info"></i></button> 
+                        <button class="write-btn" data-id="3"><i class="fa-solid fa-pencil"></i></button>   
+                        <button class="trash-btn" data-id="3"><i class="fa-solid fa-trash"></i></button> 
+                    </div>
+                    <div class="Bar-Element">
+                        Ana Clara Ferreira 
+                        <button class="info-btn" data-id="4"><i class="fa-solid fa-info"></i></button> 
+                        <button class="write-btn" data-id="4"><i class="fa-solid fa-pencil"></i></button>   
+                        <button class="trash-btn" data-id="4"><i class="fa-solid fa-trash"></i></button> 
+                    </div>   
+                </div>
+                <div class="Create-Cadastro"> 
+                    <button id="empty"> Adicionar novo cadastro </button> 
+                </div>
             </div>
         </div>
     </div>
 
-
     <div class="info-modal" id="modal">
         <button id="close-modal"><i class="fa-solid fa-x"></i></button>
         <div class="modal-content">
-            <form action="scripts/change.php" class="form-change" method="post">
+            <form class="form-change" method="post">
                 <div class="edit-box"> <input type="text" placeholder="Nome"> </div>
                 <div class="edit-box"> <input type="email" placeholder="Email"> </div>
                 <div class="edit-box"> <input type="number" placeholder="Idade"> </div>
                 <div class="edit-box"> <input type="number" placeholder="CPF"> </div>
                 <div class="edit-box"> <input type="number" placeholder="CEP"> </div> 
-                <div class="Create-Cadastro" id="Finalizar"> <button id="empty"> Finalizar edições </button> </div>
+                <div class="Create-Cadastro" id="Finalizar"> 
+                    <button id="empty"> Finalizar edições </button> 
+                </div>
             </form>
         </div>
     </div>
 
     <script src="main.js"></script>
 </body>
-</html>
+</html> 

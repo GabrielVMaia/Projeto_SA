@@ -15,7 +15,6 @@
 }
 
 body {
-    background: #2A7B9B;
     background: linear-gradient(169deg, rgba(42, 123, 155, 1) 0%, rgba(87, 152, 199, 1) 50%, rgba(83, 191, 237, 1) 100%);
     background-size: 120%;
     background-repeat: no-repeat;
@@ -26,7 +25,6 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,10 +33,10 @@ body {
 
 button {
     cursor: pointer;
+    transition: 0.3s ease all;
 }
 
-.header
-{
+.header {
     display: flex;
     padding: 10px;
     top: 10px;
@@ -46,15 +44,10 @@ button {
     justify-content: center;
 }
 
-.main-container
-{
+.main-container {
     width: 90%;
     height: 40rem;
     display: flex;
-}
-
-.main-container 
-{
     background: rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -63,8 +56,7 @@ button {
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.right-side-panel
-{
+.right-side-panel {
     margin: 10px;
     padding: 20px;
     background: rgba(255, 255, 255, 0.185);
@@ -77,16 +69,14 @@ button {
     width: 200rem;
 }
 
-#config
-{
+#config {
     background: none;
     width: fit-content;
     height: fit-content;
-    color:#0987b9
+    color: #0987b9;
 }
 
-.left-side-panel
-{
+.left-side-panel {
     margin: 10px;
     gap: 10px;
     padding: 20px;
@@ -98,34 +88,9 @@ button {
     border: 1px solid rgba(255, 255, 255, 0.3);
     height: 38rem;
     width: 10rem;
-}
-
-.left-side-panel
-{
     display: flex;
     justify-content: center;
     flex-direction: column;
-}
-
-.content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 10px;
-}
-
-#close-modal
-{
-    padding: 10px;
-    margin: 10px;
-    border-radius: 6px;
-    background-color: rgba(255, 255, 255, 0);
-    width: 100px;
-    height: 70px;
-    border-style: none;
-    text-align: center;
-    color: red;   
 }
 
 .left-side-panel button {
@@ -139,156 +104,206 @@ button {
     text-align: center;
 }
 
-button:active
-{
+button:active {
     background-color: rgba(241, 235, 235, 0.267);
 }
 
-#trash {
-    background-color: red;
-    width: 30px;
-    height: 25px;
-    border-radius: 6px;
-}
-
-#info 
-{
+.info-btn {
     background-color: rgb(0, 236, 253);
     width: 30px;
     height: 25px;
     border-radius: 6px;
+    border: none;
 }
 
-#write
-{
+.write-btn {
     background-color: rgb(245, 169, 7);
     width: 30px;
     height: 25px;
     border-radius: 6px;
+    border: none;
 }
 
-.Bar-Element 
-{
+.trash-btn {
+    background-color: red;
+    width: 30px;
+    height: 25px;
+    border-radius: 6px;
+    border: none;
+}
+
+.Bar-Element {
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 20px;
-
     background: rgba(194, 192, 192, 0.411);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-
     width: 100%;
     height: 3rem;
+    min-height: 3rem;
+    max-height: 3rem;
+    flex-shrink: 0;
+    padding: 0 20px;
 }
 
-.Create-Cadastro
-{
+.Create-Cadastro {
     display: flex;
     justify-content: center;
     align-items: center;
-
     gap: 20px;
-
     background: rgba(5, 224, 89, 0.411);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-
     width: 100%;
-    height: 3rem; 
+    height: 3rem;
+    min-height: 3rem;
+    flex-shrink: 0;
 }
 
-.info-modal
-{
-    position: fixed; 
-    z-index: 999; 
+.scrollable-area {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-right: 10px;
+    min-height: 0;
+}
+
+.scrollable-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-area::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.scrollable-area::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+}
+
+.scrollable-area::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+#empty {
+    background: #4C9EFF;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    font-size: 1rem;
+    font-family: monospace;
+    border-radius: 8px;
+    transition: 0.3s ease;
+}
+
+#empty:hover {
+    background: #2a6ddf;
+}
+
+.info-modal {
+    position: fixed;
+    z-index: 999;
     left: 0;
     top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.4); 
-
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
     display: none;
     justify-content: center;
-    align-items: center;   
+    align-items: center;
 }
 
-.info-modal-show 
-{
+.info-modal-show {
     display: flex;
 }
 
-input 
-{
-    text-align: center;
-    border-style: none;
-    width: 10rem;
-    height: 2rem;
-    background: none;
-}
-
-.modal-content form
-{   
-    gap: 10px;
-    padding: 10px;
-    background: rgba(138, 137, 137, 0.411);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    width: 100%;
-    height: 25rem;
-
-    display: flex;  
-    align-items: center;
-    flex-direction: column;
-}
-
-.modal-content
-{   
-    gap: 10px;
-    padding: 10px;
-    background: rgba(138, 137, 137, 0.411);
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    width: 70rem;
-    height: 25rem;
-
-    display: flex;  
-    align-items: center;
-    flex-direction: column;
-}
-
-
-.edit-box
-{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
+.modal-content {
     gap: 20px;
-    border-radius: 10px;
-    text-align: center;
-    width: 100%;
-    background-color: rgba(151, 151, 151, 0.897);
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    width: 600px;
+    max-width: 90%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
-#empty
-{
-    background: none;
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.edit-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.edit-box input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    font-family: monospace;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
     border: none;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.edit-box input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.edit-box input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 0 2px var(--neon-blue);
+}
+
+#close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: rgba(255, 0, 0, 0.2);
+    color: red;
+    font-size: 1.5rem;
+    padding: 10px;
+    border-radius: 16px;
     cursor: pointer;
+    transition: 0.3s ease;
+}
+
+#close-modal:hover {
+    background: rgba(255, 0, 0, 0.4);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 10px;
 }
