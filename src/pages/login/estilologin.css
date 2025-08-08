@@ -1,0 +1,134 @@
+/* estilologin.css */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #90d1d1;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  gap: 50px;
+  background-color: #84c0c0;
+  border-radius: 20px;
+  box-shadow: 6px 6px #8cd8d8;
+}
+
+#login-btn {
+  width: 15rem;
+  cursor: pointer;
+  height: 3rem;
+  border: none;
+  background-color: #64acac;
+  border-radius: 15px;
+  color: #d8d6d6;
+  transition: .2s;
+}
+
+#login-btn:hover {
+  background-color: #488080;
+}
+
+.logo {
+  flex: 1; 
+  display: flex;
+  justify-content: flex-end; 
+}
+
+.logo img {
+  max-width: 250px;
+  max-height: 250px;
+  border-radius: 20px;
+}
+
+.form-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column; 
+  gap: 15px; 
+  max-width: 300px; 
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #a5cfcf;
+  border-radius: 8px;
+  background-color: #d6f0f0;
+  color: #2e4e4e;
+  transition: all 0.2s ease;
+}
+
+input::placeholder {
+  color: #6a9a9a;
+}
+
+input:focus {
+  outline: none;
+  border-color: #64acac;
+  background-color: #ffffff;
+  box-shadow: 0 0 4px rgba(100, 172, 172, 0.5);
+}
+
+input:hover {
+  background-color: #e0f7f7;
+}
+
+#popup-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 250px;
+  max-width: 300px;
+  padding: 15px 20px;
+  border-radius: 6px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#popup-message.success {
+  background-color: #4BB543;
+}
+
+#popup-message.error {
+  background-color: #E74C3C;
+}
+
+#popup-message:not(.hidden) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#popup-icon {
+  font-size: 20px;
+}
+
+#popup-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+#popup-close:hover {
+  color: #ddd;
+}
