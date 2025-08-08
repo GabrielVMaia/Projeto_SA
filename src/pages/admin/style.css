@@ -359,64 +359,58 @@ button:active {
 .form-edit button[type="submit"]:hover {
     background: #2a6ddf;
 }
-.popup {
-    position: fixed;
-    top: 20px;
-    right: -400px;
-    background: #fff;
-    color: black;
-    padding: 12px 16px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: sans-serif;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-    min-width: 250px;
-    z-index: 9999;
-    opacity: 0;
-    transition: all 0.3s ease;
+
+#popup-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 250px;
+  max-width: 300px;
+  padding: 15px 20px;
+  border-radius: 6px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
 
-.popup.show {
-    right: 20px;
-    opacity: 1;
+#popup-message.success {
+  background-color: #4BB543;
 }
 
-.popup.success {
-    border-left: 5px solid #28a745;
+#popup-message.error {
+  background-color: #E74C3C;
 }
 
-.popup.error {
-    border-left: 5px solid #dc3545;
+#popup-message:not(.hidden) {
+  opacity: 1;
+  pointer-events: auto;
 }
 
-.popup i {
-    font-size: 20px;
+#popup-icon {
+  font-size: 20px;
 }
 
-.popup.success i {
-    color: #28a745;
+#popup-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
 }
 
-.popup.error i {
-    color: #dc3545;
-}
-
-.popup span {
-    flex: 1;
-}
-
-.popup-close {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: #666;
-    font-size: 14px;
-}
-
-.popup-close:hover {
-    color: #000;
+#popup-close:hover {
+  color: #ddd;
 }
 
 .filtros-container {

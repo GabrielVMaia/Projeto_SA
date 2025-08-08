@@ -68,27 +68,33 @@ inputCepEdit.addEventListener("input", function(e) {
     e.target.value = formatar(e.target.value, templateCEP);
 });
 
+
 /* --[[ Popup ]]-- */
 
-function mostrarPopup(message, type = 'success', duration = 3000) {
-    const popup = document.getElementById('popup-message');
-    const icon = document.getElementById('popup-icon');
-    const text = document.getElementById('popup-text');
+function mostratPopup(message, type = 'success', duration = 3000) {
+  const popup = document.getElementById('popup-message');
+  const icon = document.getElementById('popup-icon');
+  const text = document.getElementById('popup-text');
+  const closeBtn = document.getElementById('popup-close');
 
-    popup.classList.remove('hidden', 'success', 'error');
-    popup.classList.add(type);
+  popup.className = ''; // reseta classes
+  popup.classList.add(type);
+  popup.classList.remove('hidden');
 
-    if (type === 'success') {
-        icon.className = 'fa-solid fa-circle-check';
-    } else {
-        icon.className = 'fa-solid fa-circle-xmark';
-    }
+  icon.className = ''; // reseta classes
+  icon.classList.add('fa-solid');
+  icon.classList.add(type === 'success' ? 'fa-circle-check' : 'fa-circle-xmark');
 
-    text.textContent = message;
+  text.textContent = message;
 
-    setTimeout(() => {
-        popup.classList.add('hidden');
-    }, duration);
+  function esconder() {
+    popup.classList.add('hidden');
+    clearTimeout(timeoutId);
+  }
+
+  closeBtn.onclick = esconder;
+
+  const timeoutId = setTimeout(esconder, duration);
 }
 
 document.getElementById('popup-close').addEventListener('click', () => {
@@ -97,68 +103,57 @@ document.getElementById('popup-close').addEventListener('click', () => {
 
 /* --[[ AJAX ]]-- */
 
-function mostratPopup(message, type = "success") {
-    let popup = document.createElement("div");
-    popup.className = `popup ${type}`;
-    popup.innerHTML = `
-        <i class="fas ${type === "success" ? "fa-check-circle" : "fa-times-circle"}"></i>
-        <span>${message}</span>
-        <button class="popup-close"><i class="fas fa-times"></i></button>
-    `;
-
-    document.body.appendChild(popup);
-
-    setTimeout(() => {
-        popup.classList.add("show");
-    }, 50);
-
-    popup.querySelector(".popup-close").addEventListener("click", () => {
-        popup.classList.remove("show");
-        setTimeout(() => popup.remove(), 300);
-    });
-
-    setTimeout(() => {
-        popup.classList.remove("show");
-        setTimeout(() => popup.remove(), 300);
-    }, 4000);
-}
-
-function enviarParaPHP(formData, callback) {
+function enviarParaPHP(formData, funcResposta) {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', 'handle.php', true);
-    
-    const handleResponse = () => {
-        const isSuccess = xhr.status === 200;
-        
-        if (!isSuccess) {
-            console.error(`Erro HTTP ${xhr.status}:`, xhr.responseText);
-            mostratPopup(`Erro ${xhr.status}: Verifique os dados ou conexão`, "error");
-            return;
-        }
-        
-        if (xhr.responseText.trim().startsWith('<!DOCTYPE') || xhr.responseText.trim().startsWith('<html')) {
-            console.error('Servidor retornou HTML em vez de JSON. Verifique se o arquivo PHP existe e está sendo executado.');
-            console.error('Response:', xhr.responseText);
-            mostratPopup('Erro: Servidor não está executando PHP corretamente.', "error");
-            return;
-        }
-        
+   
+    const handleResposta = () => {
         try {
-            const response = JSON.parse(xhr.responseText);
-            if (response.success) {
-                mostratPopup(response.message || "Operação concluída com sucesso!", "success");
-            } else {
-                mostratPopup(response.message || "Ocorreu um erro.", "error");
+            // Tenta parsear a resposta JSON primeiro, mesmo com status de erro
+            const resposta = JSON.parse(xhr.responseText);
+            
+            // Verifica se tem redirecionamento (cookie expirado/sem login)
+            if (resposta.redirect) {
+                mostratPopup(resposta.message || "Sessão expirada. Redirecionando...", "error");
+                setTimeout(() => {
+                    window.location.href = resposta.redirect;
+                }, 2000);
+                return;
             }
-            callback(response);
+            
+            // Exibe mensagem do PHP (sucesso ou erro)
+            if (resposta.success) {
+                mostratPopup(resposta.message || "Operação concluída com sucesso!", "success");
+            } else {
+                mostratPopup(resposta.message || "Ocorreu um erro.", "error");
+            }
+            
+            funcResposta(resposta);
+            
         } catch (e) {
+            // Se não conseguir fazer parse do JSON, trata como erro de servidor
+            if (xhr.status === 0) {
+                mostratPopup('Erro de conexão. Verifique se o servidor está rodando.', "error");
+            } else if (xhr.status >= 500) {
+                mostratPopup(`Erro interno do servidor (${xhr.status}). Tente novamente.`, "error");
+            } else if (xhr.status === 401) {
+                mostratPopup('Acesso negado. Faça login novamente.', "error");
+                setTimeout(() => {
+                    window.location.href = '../login/login.html';
+                }, 2000);
+            } else if (xhr.status === 405) {
+                mostratPopup('Método não permitido. Erro na aplicação.', "error");
+            } else {
+                mostratPopup(`Erro ${xhr.status}: ${xhr.responseText || 'Resposta inválida do servidor'}`, "error");
+            }
+            
             console.error('Parse error:', e);
             console.error('Response text:', xhr.responseText);
-            mostratPopup('Erro na resposta do servidor.', "error");
+            console.error('Status:', xhr.status);
         }
     };
-
-    xhr.onreadystatechange = () => xhr.readyState === 4 && handleResponse();
+    
+    xhr.onreadystatechange = () => xhr.readyState === 4 && handleResposta();
     xhr.onerror = () => mostratPopup('Erro de conexão. Verifique se o servidor está rodando.', "error");
     xhr.send(formData);
 }
@@ -191,6 +186,7 @@ formCreate.addEventListener('submit', function(e) {
     formData.append('author', author);
     
     enviarParaPHP(formData, function(response) {
+        
         if (!response.success) {
             if(errorDiv){
               errorDiv.textContent = response.message;
@@ -216,6 +212,7 @@ formCreate.addEventListener('submit', function(e) {
             modalCreate.classList.remove("info-modal-show");
             formCreate.reset();
             carregarRegistrosNaTela();
+
         }
     });
 });
@@ -476,8 +473,8 @@ function criarElementoRegistro(registro) {
 }
 
 function carregarRegistrosNaTela() {
-    const existingElements = parentClass.querySelectorAll('.Bar-Element');
-    existingElements.forEach(el => el.remove());
+    const elementosExistentes = parentClass.querySelectorAll('.Bar-Element');
+    elementosExistentes.forEach(el => el.remove());
 
     registroManager.carregarTodos();
 
@@ -508,7 +505,7 @@ function adicionarEventListeners() {
             if (confirm('Tem certeza que deseja excluir este registro?')) {
                 if (registroManager.removerRegistro(id)) {
                     carregarRegistrosNaTela();
-                    mostrarPopup('Registro removido com sucesso!', "success");
+                    mostratPopup('Registro removido com sucesso!');
                 }
             }
         });

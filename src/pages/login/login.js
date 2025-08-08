@@ -58,6 +58,7 @@ async function enviarLogin(usuario, senha) {
 }
 
 // --[[ Evento do botão de login ]]--
+
 loginBtn.addEventListener('click', () => {
     const usuario = usuarioInput.value.trim();
     const senha = senhaInput.value;

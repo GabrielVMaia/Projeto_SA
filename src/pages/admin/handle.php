@@ -15,6 +15,17 @@ header('Access-Control-Allow-Headers: Content-Type');
 // Remove certos erros de acontecer em produção
 error_reporting(0);
 
+// Verifica se o cookie de login existe e é válido
+if (!isset($_COOKIE['login_user']) || empty($_COOKIE['login_user'])) {
+    http_response_code(401);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Acesso negado. Faça login novamente.',
+        'redirect' => '../login/login.html'
+    ]);
+    exit;
+}
+
 function error($message = 'Dados inválidos')
 {
     http_response_code(400);
@@ -96,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
         if (empty($nome)) { error('Nome é obrigatório'); }
         if ($idade === FALSE || $idade <= 0) { error('Idade deve ser um número positivo'); }
         if ($email === FALSE) { error('Email inválido'); }
-        if (!strpos($email, "@gmail.com")) { error('Apenas emails @gmail.com são aceitos'); }
+        if (!strpos($email, "@")) { error('Falta um @ no campo de email'); }
         if (!validaCPF($cpf)) { error('CPF inválido'); }
         if (!validarCEP($cep)) { error('CEP inválido'); }
         if (empty($cargo)) { error('Cargo é obrigatório'); }
@@ -106,6 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
             'success' => true,
             'message' => $isEdit ? "Registro editado com sucesso!" : "Registro criado com sucesso!",
             'action' => $action,
+            'user' => $_COOKIE['login_user'], // Adiciona informação do usuário logado
             'data' => [
                 'nome' => $nome,
                 'idade' => $idade,
@@ -126,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST')
     } catch (Exception $e) {
         error('Erro interno do servidor: ' . $e->getMessage());
     }
-} else { 
+} else { // Não permitimos outros métodos
     http_response_code(405);
     echo json_encode(['success' => false, 'message' => 'Método não permitido']);
 }

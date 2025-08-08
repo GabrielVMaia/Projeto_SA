@@ -11,10 +11,18 @@ function aplicarFiltros() {
         if (valor) filtros[campo] = valor;
     });
 
-    // Carrega todos os registros do localStorage para garantir sincronização
     registroManager.carregarTodos();
 
-    // Filtra os registros pela author (Nome) e dados conforme filtros
+    if (Object.keys(filtros).length === 0) {
+        scrollableArea.innerHTML = '';
+        registroManager.registros.forEach(registro => {
+            const elemento = criarElementoRegistro(registro);
+            scrollableArea.appendChild(elemento);
+        });
+        adicionarEventListeners();
+        return;
+    }
+
     const registrosFiltrados = registroManager.registros.filter(registro => {
         for (let campo in filtros) {
             let valorFiltro = filtros[campo];
@@ -55,5 +63,4 @@ inputsFiltro.forEach(input => {
     input.addEventListener('input', aplicarFiltros);
 });
 
-// Inicializa exibindo tudo
 document.addEventListener('DOMContentLoaded', aplicarFiltros);
