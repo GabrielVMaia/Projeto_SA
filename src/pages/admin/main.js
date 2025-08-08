@@ -77,11 +77,11 @@ function mostratPopup(message, type = 'success', duration = 3000) {
   const text = document.getElementById('popup-text');
   const closeBtn = document.getElementById('popup-close');
 
-  popup.className = ''; // reseta classes
+  popup.className = '';
   popup.classList.add(type);
   popup.classList.remove('hidden');
 
-  icon.className = ''; // reseta classes
+  icon.className = '';
   icon.classList.add('fa-solid');
   icon.classList.add(type === 'success' ? 'fa-circle-check' : 'fa-circle-xmark');
 
@@ -109,10 +109,8 @@ function enviarParaPHP(formData, funcResposta) {
    
     const handleResposta = () => {
         try {
-            // Tenta parsear a resposta JSON primeiro, mesmo com status de erro
             const resposta = JSON.parse(xhr.responseText);
             
-            // Verifica se tem redirecionamento (cookie expirado/sem login)
             if (resposta.redirect) {
                 mostratPopup(resposta.message || "Sessão expirada. Redirecionando...", "error");
                 setTimeout(() => {
@@ -121,7 +119,6 @@ function enviarParaPHP(formData, funcResposta) {
                 return;
             }
             
-            // Exibe mensagem do PHP (sucesso ou erro)
             if (resposta.success) {
                 mostratPopup(resposta.message || "Operação concluída com sucesso!", "success");
             } else {
@@ -131,7 +128,6 @@ function enviarParaPHP(formData, funcResposta) {
             funcResposta(resposta);
             
         } catch (e) {
-            // Se não conseguir fazer parse do JSON, trata como erro de servidor
             if (xhr.status === 0) {
                 mostratPopup('Erro de conexão. Verifique se o servidor está rodando.', "error");
             } else if (xhr.status >= 500) {
@@ -211,8 +207,10 @@ formCreate.addEventListener('submit', function(e) {
             
             modalCreate.classList.remove("info-modal-show");
             formCreate.reset();
-            carregarRegistrosNaTela();
-
+            
+            const elemento = criarElementoRegistro(novoRegistro);
+            parentClass.appendChild(elemento);
+            adicionarEventListenersParaElemento(elemento);
         }
     });
 });
@@ -234,7 +232,6 @@ formEdit.addEventListener('submit', function(e) {
             const registro = registroManager.buscarPorId(id);
             
             if (registro) {
-                registro.author = response.data.nome;
                 registro.dados = {
                     "Nome": response.data.nome,
                     "Email": response.data.email,
@@ -244,9 +241,10 @@ formEdit.addEventListener('submit', function(e) {
                     "Cargo": response.data.cargo
                 };
                 
+                Registro.removerDoStorage(registro.id);
                 registro.salvarStorage();
                 modalEdit.classList.remove("info-modal-show");
-                carregarRegistrosNaTela();
+                atualizarElementoNaTela(registro);
             }
         }
     });
@@ -313,6 +311,8 @@ class Registro {
 
     salvarStorage() {
         try {
+            Registro.removerDoStorage(this.id);
+            
             const nomeArquivo = `Registro_${this.author}_${this.id}`;
         
             const registroCompleto = {
@@ -486,6 +486,56 @@ function carregarRegistrosNaTela() {
     adicionarEventListeners();
 }
 
+function atualizarElementoNaTela(registro) {
+    const elemento = document.querySelector(`[data-id="${registro.id}"]`);
+    if (elemento) {
+        const barElement = elemento.closest('.Bar-Element');
+        if (barElement) {
+            const textNode = barElement.childNodes[0];
+            textNode.textContent = registro.dados.Nome || 'Sem Nome';
+        }
+    }
+}
+
+function adicionarEventListenersParaElemento(elemento) {
+    const infoBtn = elemento.querySelector('.info-btn');
+    const trashBtn = elemento.querySelector('.trash-btn');
+    const writeBtn = elemento.querySelector('.write-btn');
+    
+    if (infoBtn) {
+        infoBtn.addEventListener('click', function() {
+            const id = parseFloat(this.getAttribute('data-id'));
+            const registro = registroManager.buscarPorId(id);
+            if (registro) {
+                mostrarInfoModal(registro);
+            }
+        });
+    }
+    
+    if (trashBtn) {
+        trashBtn.addEventListener('click', function() {
+            const id = parseFloat(this.getAttribute('data-id'));
+            if (confirm('Tem certeza que deseja excluir este registro?')) {
+                if (registroManager.removerRegistro(id)) {
+                    elemento.remove();
+                    mostratPopup('Registro removido com sucesso!');
+                }
+            }
+        });
+    }
+    
+    if (writeBtn) {
+        writeBtn.addEventListener('click', function() {
+            const id = parseFloat(this.getAttribute('data-id'));
+            const registro = registroManager.buscarPorId(id);
+            if (registro) {
+                preencherFormularioEdicao(registro);
+                modalEdit.classList.add("info-modal-show");
+            }
+        });
+    }
+}
+
 function adicionarEventListeners() {
     const infoBtns = document.querySelectorAll('.info-btn');
     infoBtns.forEach(btn => {
@@ -640,4 +690,28 @@ function debug_limpar_todos_registros() {
         console.log("Todos os registros foram removidos!");
         alert("Todos os registros foram removidos!");
     }
+}
+
+function debug_remover_duplicatas() {
+    const registrosSalvos = Registro.listarRegistrosSalvos();
+    const idsVistos = new Set();
+    let removidos = 0;
+    
+    registrosSalvos.forEach(nomeArquivo => {
+        try {
+            const dados = JSON.parse(localStorage.getItem(nomeArquivo));
+            if (idsVistos.has(dados.id)) {
+                localStorage.removeItem(nomeArquivo);
+                removidos++;
+                console.log(`Duplicata removida: ${nomeArquivo}`);
+            } else {
+                idsVistos.add(dados.id);
+            }
+        } catch (error) {
+            console.error(`Erro ao processar ${nomeArquivo}:`, error);
+        }
+    });
+    
+    console.log(`${removidos} duplicatas removidas`);
+    carregarRegistrosNaTela();
 }
