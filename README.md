@@ -16,7 +16,7 @@ Contém dois sites: um para login e outro para edição de registros e operaçõ
 
 ## Desenvolvedores
 
-[Gabriel Vinícius da Maia](https://github.com/GabrielVMaia)
+[Gabriel Vinícius da Maia](https://github.com/Gabriel-V-Maia)
 
 [Willian Guedes](https://github.com/WillianGuedesSenai)
 
